@@ -18,7 +18,7 @@ export default function TokenPage() {
   useEffect(() => {
     if (!token) return;
 
-    // @ts-ignore  – tv.js attaches TradingView to window
+    // @ts-expect-error TradingView is provided by the external tv.js script
     if (typeof window !== 'undefined' && window.TradingView) {
       // remove any previous widget
       document.getElementById('tv-chart')!.innerHTML = '';
@@ -26,7 +26,7 @@ export default function TokenPage() {
       // build a simple “exchange:symbol” string (defaults to Binance)
       const tvSymbol = `BINANCE:${token.symbol.toUpperCase()}USDT`;
 
-      // @ts-ignore
+      // @ts-expect-error TradingView is provided by the external tv.js script
       new window.TradingView.widget({
         symbol: tvSymbol,
         container_id: 'tv-chart',
@@ -66,7 +66,9 @@ export default function TokenPage() {
           24 h&nbsp;%:{' '}
           <span
             className={
-              token.price_change_percentage_24h >= 0 ? 'text-green-600' : 'text-red-600'
+              token.price_change_percentage_24h >= 0
+                ? 'text-green-600'
+                : 'text-red-600'
             }
           >
             {token.price_change_percentage_24h.toFixed(2)} %
